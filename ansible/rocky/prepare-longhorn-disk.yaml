@@ -1,0 +1,75 @@
+# prepare-longhorn-disk.yaml
+- name: Prepare dedicated Longhorn disk partition
+  hosts: k3s_servers
+  become: true
+
+  vars:
+    disk: /dev/nvme0n1
+    longhorn_partition: /dev/nvme0n1p7
+    longhorn_mount: /var/lib/longhorn
+
+  tasks:
+    - name: Install required packages
+      ansible.builtin.dnf:
+        name:
+          - xfsprogs
+          - parted
+        state: present
+
+    - name: Check if Longhorn partition already exists
+      ansible.builtin.stat:
+        path: "{{ longhorn_partition }}"
+      register: longhorn_part
+
+    - name: Delete old Windows partitions and create Longhorn partition
+      ansible.builtin.shell: |
+        set -e
+        parted -s {{ disk }} rm 3 || true
+        parted -s {{ disk }} rm 4 || true
+        parted -s {{ disk }} mkpart primary xfs 1286144s 290316287s
+        parted -s {{ disk }} name 7 longhorn || true
+        partprobe {{ disk }}
+      when: not longhorn_part.stat.exists
+
+    - name: Wait for new partition device
+      ansible.builtin.wait_for:
+        path: "{{ longhorn_partition }}"
+        timeout: 30
+
+    - name: Check filesystem type
+      ansible.builtin.command: blkid -o value -s TYPE "{{ longhorn_partition }}"
+      register: fs_type
+      failed_when: false
+      changed_when: false
+
+    - name: Format Longhorn partition as XFS
+      ansible.builtin.command: mkfs.xfs -f "{{ longhorn_partition }}"
+      when: fs_type.stdout != "xfs"
+
+    - name: Create Longhorn mount directory
+      ansible.builtin.file:
+        path: "{{ longhorn_mount }}"
+        state: directory
+        mode: "0755"
+
+    - name: Get partition UUID
+      ansible.builtin.command: blkid -o value -s UUID "{{ longhorn_partition }}"
+      register: longhorn_uuid
+      changed_when: false
+
+    - name: Add Longhorn mount to fstab
+      ansible.builtin.mount:
+        path: "{{ longhorn_mount }}"
+        src: "UUID={{ longhorn_uuid.stdout }}"
+        fstype: xfs
+        opts: defaults,noatime
+        state: mounted
+
+    - name: Show Longhorn mount
+      ansible.builtin.command: df -h "{{ longhorn_mount }}"
+      register: df_output
+      changed_when: false
+
+    - name: Print mount result
+      ansible.builtin.debug:
+        var: df_output.stdout_lines

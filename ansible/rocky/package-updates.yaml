@@ -1,0 +1,14 @@
+---
+- name: Update packages on Rocky Linux hosts
+  hosts: rocky
+  become: true
+
+  tasks:
+    - name: Refresh DNF cache
+      dnf:
+        update_cache: true
+
+    - name: Upgrade all packages
+      dnf:
+        name: "*"
+        state: latest
