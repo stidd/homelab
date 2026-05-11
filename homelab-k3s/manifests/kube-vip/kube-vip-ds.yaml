@@ -1,16 +1,8 @@
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
-  annotations:
-    deprecated.daemonset.template.generation: "1"
-    kubectl.kubernetes.io/last-applied-configuration: |
-      {"apiVersion":"apps/v1","kind":"DaemonSet","metadata":{"annotations":{},"name":"kube-vip-ds","namespace":"kube-system"},"spec":{"selector":{"matchLabels":{"app":"kube-vip"}},"template":{"metadata":{"labels":{"app":"kube-vip"}},"spec":{"containers":[{"args":["manager"],"env":[{"name":"vip_arp","value":"true"},{"name":"vip_interface","value":"eno1"},{"name":"address","value":"192.168.4.50"},{"name":"vip_subnet","value":"32"},{"name":"cp_enable","value":"true"},{"name":"vip_leaderelection","value":"true"}],"image":"ghcr.io/kube-vip/kube-vip:v1.0.4","name":"kube-vip","securityContext":{"capabilities":{"add":["NET_ADMIN","NET_RAW"]}}}],"hostNetwork":true,"serviceAccountName":"kube-vip","tolerations":[{"operator":"Exists"}]}}}}
-  creationTimestamp: "2026-04-26T02:19:10Z"
-  generation: 1
   name: kube-vip-ds
   namespace: kube-system
-  resourceVersion: "102454"
-  uid: 5a9622d8-6cec-4e98-bcc0-ec4a5aa857f2
 spec:
   revisionHistoryLimit: 10
   selector:
@@ -36,6 +28,8 @@ spec:
         - name: cp_enable
           value: "true"
         - name: vip_leaderelection
+          value: "true"
+        - name: svc_enable
           value: "true"
         image: ghcr.io/kube-vip/kube-vip:v1.0.4
         imagePullPolicy: IfNotPresent
@@ -63,11 +57,3 @@ spec:
       maxSurge: 0
       maxUnavailable: 1
     type: RollingUpdate
-status:
-  currentNumberScheduled: 3
-  desiredNumberScheduled: 3
-  numberAvailable: 3
-  numberMisscheduled: 0
-  numberReady: 3
-  observedGeneration: 1
-  updatedNumberScheduled: 3

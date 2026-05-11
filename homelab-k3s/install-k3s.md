@@ -10,7 +10,7 @@ ansible-playbook -i inventory.ini prep-k3s.yml
 2. install k3s on first node:
 
 ```bash
-curl -sfL https://get.k3s.io | sudo sh -s - server \ --cluster-init \ --node-ip 192.168.4.46 \ --tls-san 192.168.4.46 \ --write-kubeconfig-mode 644
+curl -sfL https://get.k3s.io | sudo sh -s - server \ --cluster-init \ --node-ip 192.168.4.46 \ --tls-san 192.168.4.46 \ --write-kubeconfig-mode 644 \ --disable=traefik
 ```
 
 3. grab the join token then you're ready to join other nodes:
@@ -26,5 +26,13 @@ curl -sfL https://get.k3s.io | sudo K3S_TOKEN='<TOKEN>' sh -s - server \
   --server https://192.168.4.46:6443 \
   --node-ip 192.168.4.47 \
   --tls-san 192.168.4.47 \
+  --write-kubeconfig-mode 644
+```
+
+```bash
+curl -sfL https://get.k3s.io | sudo K3S_TOKEN='<TOKEN>' sh -s - server \
+  --server https://192.168.4.46:6443 \
+  --node-ip 192.168.4.48 \
+  --tls-san 192.168.4.48 \
   --write-kubeconfig-mode 644
 ```
