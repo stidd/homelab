@@ -30,3 +30,22 @@ curl -k https://whoami.steventidd.com
 
 The HTTPS test uses `-k` because the current wildcard certificate is
 self-signed.
+
+## HTTP Redirect
+
+HTTP-to-HTTPS redirect is modeled as a separate `HTTPRoute` attached only to
+the Gateway's `http` listener. The application route attaches only to the
+`https` listener.
+
+Apply:
+
+```bash
+kubectl apply -f clusters/hp-k3s/platform/test-apps/whoami
+```
+
+Validate:
+
+```bash
+curl -I http://whoami.steventidd.com
+curl -k https://whoami.steventidd.com
+```

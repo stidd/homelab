@@ -48,6 +48,7 @@ spec:
   parentRefs:
     - name: platform-gateway
       namespace: istio-ingress
+      sectionName: https
   hostnames:
     - whoami.steventidd.com
   rules:
