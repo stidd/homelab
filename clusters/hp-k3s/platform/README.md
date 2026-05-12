@@ -51,11 +51,22 @@ cd bootstrap
 
 It installs homelab CoreDNS at `192.168.4.61`.
 
+The TLS bootstrap is:
+
+```bash
+cd bootstrap
+./tls/install.sh
+```
+
+It creates a self-signed wildcard certificate for `*.steventidd.com` and adds
+HTTPS to the shared Gateway.
+
 Validation:
 
 ```bash
 dig @192.168.4.61 whoami.steventidd.com
 curl http://whoami.steventidd.com
+curl -k https://whoami.steventidd.com
 ```
 
 ## Exposure Model

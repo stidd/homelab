@@ -13,12 +13,17 @@ Expected resources:
 
 - cert-manager Helm release or manifests
 - `ClusterIssuer` for an internal/self-signed issuer
+- Wildcard `Certificate` for `*.steventidd.com`
 - Later: `ClusterIssuer` for Let's Encrypt DNS-01
 
 ## Notes
 
 Start with a simple internal issuer if public DNS automation is not ready. Move
 to Let's Encrypt DNS-01 when the DNS provider and credentials are settled.
+
+The current wildcard certificate is directly self-signed. This is enough to
+validate Gateway TLS, but browsers will not trust it without manual trust
+configuration.
 
 ## Bootstrap
 
@@ -27,8 +32,11 @@ applies:
 
 ```text
 issuers/selfsigned-clusterissuer.yaml
+certificates/steventidd-com-wildcard.yaml
 ```
 
-cert-manager is installed, but the current Gateway is still HTTP-only. The next
-TLS step is to create certificates in `istio-ingress` and add an HTTPS listener
-to the shared Gateway.
+The wildcard certificate creates this secret for the Istio Gateway:
+
+```text
+istio-ingress/steventidd-com-tls
+```

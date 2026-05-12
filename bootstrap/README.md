@@ -28,11 +28,21 @@ Optional LAN DNS bootstrap:
 This deploys a separate CoreDNS service at `192.168.4.61` for homelab client
 DNS and resolves `*.steventidd.com` to `192.168.4.60`.
 
+Optional TLS bootstrap:
+
+```bash
+./tls/install.sh
+```
+
+This creates a direct self-signed wildcard certificate for `*.steventidd.com`
+and adds an HTTPS listener to the shared Istio Gateway.
+
 Validation:
 
 ```bash
 dig @192.168.4.61 whoami.steventidd.com
 curl http://whoami.steventidd.com
+curl -k https://whoami.steventidd.com
 ```
 
 ## Full Bootstrap Draft

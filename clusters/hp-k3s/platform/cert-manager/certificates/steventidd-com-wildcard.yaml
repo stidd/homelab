@@ -1,0 +1,13 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: steventidd-com-wildcard
+  namespace: istio-ingress
+spec:
+  secretName: steventidd-com-tls
+  issuerRef:
+    name: selfsigned
+    kind: ClusterIssuer
+  dnsNames:
+    - "*.steventidd.com"
+    - steventidd.com

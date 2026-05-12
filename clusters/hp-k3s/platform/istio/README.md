@@ -19,7 +19,18 @@ programmed at:
 192.168.4.60
 ```
 
-The current listener is HTTP on port `80`. HTTPS/TLS is planned next.
+The Gateway has listeners for:
+
+```text
+80  HTTP
+443 HTTPS
+```
+
+The HTTPS listener uses the self-signed wildcard secret:
+
+```text
+istio-ingress/steventidd-com-tls
+```
 
 ## Initial Shape
 
@@ -48,6 +59,15 @@ service address:
 
 The `platform-gateway` resource uses Istio's Gateway API automated deployment.
 Its generated service is customized with `loadBalancerIP: 192.168.4.60`.
+
+Validate HTTPS with:
+
+```bash
+curl -k https://whoami.steventidd.com
+```
+
+The `-k` flag is expected while using the direct self-signed wildcard
+certificate.
 
 ## Adoption Notes
 

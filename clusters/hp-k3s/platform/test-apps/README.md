@@ -25,6 +25,8 @@ Validate the route before installing Rancher:
 
 ```bash
 curl http://whoami.steventidd.com
+curl -k https://whoami.steventidd.com
 ```
 
-TLS validation will be added after HTTPS is enabled on the shared Gateway.
+The HTTPS test uses `-k` because the current wildcard certificate is
+self-signed.

@@ -34,3 +34,14 @@ spec:
       allowedRoutes:
         namespaces:
           from: All
+    - name: https
+      hostname: "*.steventidd.com"
+      port: 443
+      protocol: HTTPS
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - name: steventidd-com-tls
+      allowedRoutes:
+        namespaces:
+          from: All
