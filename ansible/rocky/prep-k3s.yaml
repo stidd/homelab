@@ -66,3 +66,23 @@
         - 2379-2380/tcp
         - 8472/udp
         - 10250/tcp
+
+    - name: Enable firewalld masquerade for pod and service traffic
+      ansible.posix.firewalld:
+        masquerade: true
+        permanent: true
+        immediate: true
+        state: enabled
+
+    # These interfaces are created by k3s/flannel after k3s starts. Keeping the
+    # task here also makes the playbook useful for re-runs after cluster install.
+    - name: Trust Kubernetes CNI and flannel interfaces
+      ansible.posix.firewalld:
+        zone: trusted
+        interface: "{{ item }}"
+        permanent: true
+        immediate: true
+        state: enabled
+      loop:
+        - cni0
+        - flannel.1
