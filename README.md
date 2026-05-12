@@ -1,16 +1,39 @@
 # homelab
 
-## Phase 0
+## Cluster Baseline
 
-k3s deployment and kube-vip
+This repository manages a three-node k3s homelab cluster and the platform
+services that sit on top of it.
 
-Node IPs:
-  hp1 = 192.168.4.46
-  hp2 = 192.168.4.47
-  hp3 = 192.168.4.48
+## Nodes
 
-API VIP:
-  192.168.4.50
+```text
+hp1 = 192.168.4.46
+hp2 = 192.168.4.47
+hp3 = 192.168.4.48
+```
 
-Service LoadBalancer VIP pool:
-  192.168.4.60/32
+## VIPs
+
+```text
+192.168.4.50 = Kubernetes API
+192.168.4.60 = Istio ingress gateway
+192.168.4.61 = Homelab LAN DNS
+```
+
+## Platform
+
+The platform bootstrap currently installs:
+
+- cert-manager
+- Gateway API CRDs
+- Istio ambient core
+- Istio Gateway API ingress on `192.168.4.60`
+- CoreDNS LAN DNS on `192.168.4.61`
+- `whoami.steventidd.com` test route
+
+Platform manifests live under:
+
+```text
+clusters/hp-k3s/platform
+```

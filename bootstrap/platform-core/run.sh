@@ -21,4 +21,4 @@ echo "Installing whoami test route..."
 ./test-app/install.sh
 
 echo "platform-core bootstrap complete"
-echo "Try: curl -H 'Host: whoami.steventidd.com' http://192.168.4.60/"
+echo "Try: curl http://whoami.steventidd.com"

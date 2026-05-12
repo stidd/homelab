@@ -7,4 +7,8 @@ API VIP:
   192.168.4.50
 
 Service LoadBalancer VIP pool:
-  192.168.4.60/32
+  192.168.4.60-192.168.4.61
+
+Reserved LoadBalancer VIPs:
+  192.168.4.60 = Istio ingress gateway
+  192.168.4.61 = Homelab LAN DNS

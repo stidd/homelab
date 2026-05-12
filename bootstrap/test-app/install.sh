@@ -10,4 +10,4 @@ kubectl -n whoami rollout status deploy/whoami
 kubectl -n istio-ingress wait --for=condition=Programmed gateway/platform-gateway --timeout=180s
 
 echo "whoami test app installed"
-echo "Test with: curl -H 'Host: whoami.steventidd.com' http://192.168.4.60/"
+echo "Test with: curl http://whoami.steventidd.com"

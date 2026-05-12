@@ -10,26 +10,29 @@ kube-vip are working.
 - Node IPs: `192.168.4.46`, `192.168.4.47`, `192.168.4.48`
 - Kubernetes API VIP: `192.168.4.50`
 - Shared ingress VIP: `192.168.4.60`
+- Homelab DNS VIP: `192.168.4.61`
 - LoadBalancer provider: kube-vip
 - Ingress strategy: Istio ingress gateway using the shared ingress VIP
 
 ## Deployment Order
 
-1. `cert-manager`
-2. `gateway-api`
-3. `istio`
-4. `test-apps`
-5. `rancher`
-6. `longhorn`
-7. `observability`
-8. `security-policies`
+1. `dns`
+2. `cert-manager`
+3. `gateway-api`
+4. `istio`
+5. `test-apps`
+6. `rancher`
+7. `longhorn`
+8. `observability`
+9. `security-policies`
 
-The early goal is to make ingress reliable before adding important UIs. Mesh
-security should be enabled after the platform apps are reachable and observable.
+The early goal is to make DNS and ingress reliable before adding important UIs.
+Mesh security should be enabled after the platform apps are reachable and
+observable.
 
 ## Current Bootstrap Slice
 
-The first runnable bootstrap slice is:
+The platform-core bootstrap slice is:
 
 ```bash
 cd bootstrap
@@ -39,10 +42,20 @@ cd bootstrap
 It installs cert-manager, Gateway API CRDs, Istio ambient core, the shared
 `platform-gateway`, and the `whoami` validation route.
 
+The LAN DNS bootstrap is:
+
+```bash
+cd bootstrap
+./dns/install.sh
+```
+
+It installs homelab CoreDNS at `192.168.4.61`.
+
 Validation:
 
 ```bash
-curl -H 'Host: whoami.steventidd.com' http://192.168.4.60/
+dig @192.168.4.61 whoami.steventidd.com
+curl http://whoami.steventidd.com
 ```
 
 ## Exposure Model
@@ -51,7 +64,7 @@ Only the Istio ingress gateway should normally use a `LoadBalancer` service.
 Application services should stay internal as `ClusterIP` services and be exposed
 through Gateway API resources.
 
-Example DNS targets:
+Example app DNS targets:
 
 ```text
 rancher.steventidd.com  -> 192.168.4.60
@@ -61,8 +74,19 @@ grafana.steventidd.com  -> 192.168.4.60
 
 Istio routes requests by hostname to the correct in-cluster service.
 
+Homelab clients should use the LAN DNS service:
+
+```text
+192.168.4.61
+```
+
+That DNS service resolves `*.steventidd.com` to the shared Istio ingress VIP.
+On macOS clients, prefer split DNS with `/etc/resolver/steventidd.com` so only
+homelab names use `192.168.4.61`.
+
 ## Directory Roles
 
+- `dns`: LAN DNS for homelab hostnames.
 - `cert-manager`: cert-manager installation and cluster issuers.
 - `gateway-api`: Gateway API CRDs required by Istio Gateway resources.
 - `istio`: Istio base, control plane, ambient dataplane, and ingress gateway.

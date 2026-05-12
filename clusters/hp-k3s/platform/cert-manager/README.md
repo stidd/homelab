@@ -28,3 +28,7 @@ applies:
 ```text
 issuers/selfsigned-clusterissuer.yaml
 ```
+
+cert-manager is installed, but the current Gateway is still HTTP-only. The next
+TLS step is to create certificates in `istio-ingress` and add an HTTPS listener
+to the shared Gateway.

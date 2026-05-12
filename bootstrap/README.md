@@ -5,7 +5,7 @@ over.
 
 ## Platform Core
 
-Use this first to establish the shared ingress path before installing Rancher:
+Use this to establish the shared ingress path before installing Rancher:
 
 ```bash
 ./platform-core/run.sh
@@ -19,16 +19,27 @@ What it installs:
 4. Istio `platform-gateway` on `192.168.4.60`
 5. `whoami.steventidd.com` test route
 
+Optional LAN DNS bootstrap:
+
+```bash
+./dns/install.sh
+```
+
+This deploys a separate CoreDNS service at `192.168.4.61` for homelab client
+DNS and resolves `*.steventidd.com` to `192.168.4.60`.
+
 Validation:
 
 ```bash
-curl -H 'Host: whoami.steventidd.com' http://192.168.4.60/
+dig @192.168.4.61 whoami.steventidd.com
+curl http://whoami.steventidd.com
 ```
 
 ## Full Bootstrap Draft
 
 The older full bootstrap flow is still a working draft for Rancher and Fleet.
-It should be revised after the Istio ingress path is validated.
+It should be revised before use so Rancher is exposed through Istio instead of
+assuming a default Ingress controller.
 
 ## What this does
 1. Installs cert-manager

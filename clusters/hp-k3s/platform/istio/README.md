@@ -10,6 +10,17 @@ Istio should provide:
 - Hostname-based routing for platform UIs and apps
 - Ambient mesh security for service-to-service traffic later
 
+## Current State
+
+Istio ambient core is installed and the Gateway API `platform-gateway` is
+programmed at:
+
+```text
+192.168.4.60
+```
+
+The current listener is HTTP on port `80`. HTTPS/TLS is planned next.
+
 ## Initial Shape
 
 Expected resources:

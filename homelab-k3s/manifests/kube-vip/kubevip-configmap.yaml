@@ -5,4 +5,4 @@ metadata:
   name: kubevip
   namespace: kube-system
 data:
-  cidr-global: 192.168.4.60/32
+  cidr-global: 192.168.4.60-192.168.4.61

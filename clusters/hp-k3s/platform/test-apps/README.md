@@ -6,10 +6,9 @@ Disposable apps used to prove the platform path before exposing important UIs.
 
 Use this directory to validate:
 
-- DNS points at `192.168.4.60`
+- DNS resolves homelab names through `192.168.4.61`
 - kube-vip assigns the Istio ingress gateway IP
 - Gateway API routing works
-- TLS issuance works
 - Istio routes requests to the intended service
 
 ## First App
@@ -25,5 +24,7 @@ whoami.steventidd.com
 Validate the route before installing Rancher:
 
 ```bash
-curl -H 'Host: whoami.steventidd.com' http://192.168.4.60/
+curl http://whoami.steventidd.com
 ```
+
+TLS validation will be added after HTTPS is enabled on the shared Gateway.
