@@ -77,6 +77,13 @@ cd bootstrap
 ./run.sh
 ```
 
+Rancher only:
+
+```bash
+cd bootstrap
+./rancher/install.sh
+```
+
 After completion:
 
 - Access Rancher at https://rancher.steventidd.com
