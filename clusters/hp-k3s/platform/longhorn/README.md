@@ -19,6 +19,9 @@ Expected resources:
 - TLS certificate for `longhorn.steventidd.com`
 - Gateway API `HTTPRoute` to the Longhorn frontend service
 
+The Longhorn path should be added to the `homelab` Fleet GitRepo once Longhorn
+route manifests are added.
+
 ## Prerequisites
 
 Each node should have the Longhorn disk mounted at:

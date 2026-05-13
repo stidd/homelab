@@ -1,0 +1,5 @@
+defaultNamespace: istio-ingress
+
+labels:
+  app.kubernetes.io/part-of: hp-k3s-platform
+  homelab.steventidd.com/layer: istio-gateway

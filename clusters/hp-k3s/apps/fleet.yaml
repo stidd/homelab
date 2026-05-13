@@ -1,0 +1,5 @@
+defaultNamespace: default
+
+labels:
+  app.kubernetes.io/part-of: hp-k3s-apps
+  homelab.steventidd.com/layer: apps

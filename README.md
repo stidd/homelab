@@ -37,3 +37,13 @@ Platform manifests live under:
 ```text
 clusters/hp-k3s/platform
 ```
+
+Fleet registration manifests live under:
+
+```text
+bootstrap/fleet
+```
+
+Fleet manages platform configuration, routes, DNS, certificates, and future app
+manifests. Bootstrap remains responsible for foundational installs such as k3s,
+kube-vip, cert-manager, Istio, and Rancher.

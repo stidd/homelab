@@ -7,4 +7,8 @@ spec:
   repo: https://github.com/stidd/homelab.git
   branch: main
   paths:
-    - clusters/hp-k3s/platform
+    - clusters/hp-k3s/platform/dns
+    - clusters/hp-k3s/platform/cert-manager
+    - clusters/hp-k3s/platform/istio
+    - clusters/hp-k3s/platform/test-apps
+    - clusters/hp-k3s/platform/rancher

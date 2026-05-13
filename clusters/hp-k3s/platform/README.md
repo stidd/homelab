@@ -107,6 +107,33 @@ homelab names use `192.168.4.61`.
 - `observability`: Metrics, dashboards, tracing, and mesh visibility.
 - `security-policies`: Istio authorization, peer auth, and namespace enrollment.
 
+## Fleet Bundles
+
+Fleet uses one `GitRepo` named `homelab` with multiple explicit paths. The
+registration lives in:
+
+```text
+bootstrap/fleet/gitrepo.yaml
+```
+
+Current Fleet-managed paths:
+
+- `clusters/hp-k3s/platform/dns`
+- `clusters/hp-k3s/platform/cert-manager`
+- `clusters/hp-k3s/platform/istio`
+- `clusters/hp-k3s/platform/test-apps`
+- `clusters/hp-k3s/platform/rancher`
+
+Planned paths:
+
+- `clusters/hp-k3s/platform/longhorn`
+- `clusters/hp-k3s/platform/observability`
+- `clusters/hp-k3s/platform/security-policies`
+- `clusters/hp-k3s/apps`
+
+The foundational Helm installs remain bootstrap-managed for now. Fleet manages
+the Kubernetes configuration that sits on top of those installs.
+
 ## Operating Principles
 
 - Prefer Gateway API resources over legacy Kubernetes Ingress.
