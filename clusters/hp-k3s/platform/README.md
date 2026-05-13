@@ -134,6 +134,9 @@ Planned paths:
 The foundational Helm installs remain bootstrap-managed for now. Fleet manages
 the Kubernetes configuration that sits on top of those installs.
 
+Each active path uses `helm.takeOwnership: true` in its `fleet.yaml` so Fleet can
+adopt resources that were initially created by bootstrap scripts.
+
 ## Operating Principles
 
 - Prefer Gateway API resources over legacy Kubernetes Ingress.

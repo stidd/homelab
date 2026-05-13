@@ -57,3 +57,16 @@ Add future paths when they contain real manifests:
 - `clusters/hp-k3s/platform/observability`
 - `clusters/hp-k3s/platform/security-policies`
 - `clusters/hp-k3s/apps`
+
+## Bootstrap Adoption
+
+The platform resources were first created by bootstrap scripts. Fleet deploys
+manifest bundles through Helm, so each active layer sets:
+
+```yaml
+helm:
+  takeOwnership: true
+```
+
+This allows Fleet to adopt the existing resources instead of failing on missing
+Helm ownership labels and annotations.

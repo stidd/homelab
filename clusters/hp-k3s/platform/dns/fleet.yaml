@@ -1,5 +1,8 @@
 defaultNamespace: homelab-dns
 
+helm:
+  takeOwnership: true
+
 labels:
   app.kubernetes.io/part-of: hp-k3s-platform
   homelab.steventidd.com/layer: dns
