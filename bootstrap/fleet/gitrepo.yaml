@@ -12,3 +12,4 @@ spec:
     - clusters/hp-k3s/platform/istio
     - clusters/hp-k3s/platform/test-apps
     - clusters/hp-k3s/platform/rancher
+    - clusters/hp-k3s/platform/longhorn

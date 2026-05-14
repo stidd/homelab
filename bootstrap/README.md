@@ -84,6 +84,13 @@ cd bootstrap
 ./rancher/install.sh
 ```
 
+Longhorn only:
+
+```bash
+cd bootstrap
+./longhorn/install.sh
+```
+
 After completion:
 
 - Access Rancher at https://rancher.steventidd.com

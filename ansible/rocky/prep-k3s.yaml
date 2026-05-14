@@ -7,6 +7,8 @@
       ansible.builtin.dnf:
         name: "*"
         state: latest
+      tags:
+        - package-updates
 
     - name: Install useful packages
       ansible.builtin.dnf:
@@ -16,18 +18,44 @@
           - git
           - iproute
           - iptables
+          - iscsi-initiator-utils
           - nfs-utils
         state: present
+      tags:
+        - packages
+        - longhorn-prereqs
+
+    - name: Generate iSCSI initiator name if missing
+      ansible.builtin.shell: |
+        set -o pipefail
+        test -s /etc/iscsi/initiatorname.iscsi || echo "InitiatorName=$(/sbin/iscsi-iname)" > /etc/iscsi/initiatorname.iscsi
+      args:
+        executable: /bin/bash
+      changed_when: false
+      tags:
+        - longhorn-prereqs
+
+    - name: Enable and start iscsid for Longhorn
+      ansible.builtin.systemd:
+        name: iscsid
+        enabled: true
+        state: started
+      tags:
+        - longhorn-prereqs
 
     - name: Disable swap immediately
       ansible.builtin.command: swapoff -a
       changed_when: false
+      tags:
+        - swap
 
     - name: Disable swap in fstab
       ansible.builtin.replace:
         path: /etc/fstab
         regexp: '^([^#].*\sswap\s.*)$'
         replace: '# \1'
+      tags:
+        - swap
 
     - name: Load kernel modules
       ansible.builtin.copy:
@@ -35,12 +63,16 @@
         content: |
           br_netfilter
           overlay
+      tags:
+        - kernel-modules
 
     - name: Apply kernel modules now
       ansible.builtin.shell: |
         modprobe br_netfilter
         modprobe overlay
       changed_when: false
+      tags:
+        - kernel-modules
 
     - name: Set Kubernetes sysctls
       ansible.builtin.copy:
@@ -49,10 +81,14 @@
           net.bridge.bridge-nf-call-iptables = 1
           net.bridge.bridge-nf-call-ip6tables = 1
           net.ipv4.ip_forward = 1
+      tags:
+        - sysctls
 
     - name: Apply sysctls
       ansible.builtin.command: sysctl --system
       changed_when: false
+      tags:
+        - sysctls
 
     - name: Open K3s firewall ports
       ansible.posix.firewalld:
@@ -66,6 +102,8 @@
         - 2379-2380/tcp
         - 8472/udp
         - 10250/tcp
+      tags:
+        - firewall
 
     - name: Enable firewalld masquerade for pod and service traffic
       ansible.posix.firewalld:
@@ -73,6 +111,8 @@
         permanent: true
         immediate: true
         state: enabled
+      tags:
+        - firewall
 
     # These interfaces are created by k3s/flannel after k3s starts. Keeping the
     # task here also makes the playbook useful for re-runs after cluster install.
@@ -86,3 +126,5 @@
       loop:
         - cni0
         - flannel.1
+      tags:
+        - firewall

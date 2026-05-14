@@ -123,10 +123,10 @@ Current Fleet-managed paths:
 - `clusters/hp-k3s/platform/istio`
 - `clusters/hp-k3s/platform/test-apps`
 - `clusters/hp-k3s/platform/rancher`
+- `clusters/hp-k3s/platform/longhorn`
 
 Planned paths:
 
-- `clusters/hp-k3s/platform/longhorn`
 - `clusters/hp-k3s/platform/observability`
 - `clusters/hp-k3s/platform/security-policies`
 - `clusters/hp-k3s/apps`
